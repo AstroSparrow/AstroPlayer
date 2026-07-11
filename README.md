@@ -2,7 +2,6 @@
 **A lightweight Astronomy-Themed local Music Player built with Python on a weekend just for fun!**
 
 _**Backstory:**_ I was originally trying to make a simple python script using pygame to randomly play some of my downloaded Melodysheep music while i study. Then one thing led to another, I kept adding some features i liked, Took some help from ChatGPT and thus AstroPlayer was born!
-(I originally also bundled some music as per my choices with AstroPlayer, but had to remove it (Cause Copyright laws, Ofcourse). It was really disappointing tbh)
 
 
 ## Screenshots
@@ -45,11 +44,13 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 
 ## License
 This project is licensed under the MIT License.
+(I originally also bundled some music as per my choices with AstroPlayer, but had to remove it (Cause Copyright laws, Ofcourse). It was really disappointing tbh)
 
 
 **Note:** AstroPlayer requires at least one supported audio file (`.mp3`, `.wav`, or `.ogg`) in one of the playlist folders to start playback.
 
 - You can Download the latest pre-built executable from the **Releases** page, or run the source code using Python.
+
 
 
 _**Thanks a lot for your time! Cya later :D**_
