@@ -17,7 +17,6 @@ BASE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, "frozen", 
 
 playlist_root = os.path.join(BASE, "Assets", "Playlists")
 controlimages = os.path.join(BASE, "Assets", "Images")
-controlfont = os.path.join(BASE, "Assets", "Nasalization Rg.otf")
 controlicon = os.path.join(BASE, "Assets", "Voyager Icon.png")
 
 pygame.init()
@@ -32,7 +31,7 @@ for folder in os.listdir(playlist_root):
 icon = pygame.image.load(controlicon)
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
-font = pygame.font.Font(controlfont, 20)
+font = pygame.font.Font(None, 20)
 imagefiles = os.listdir(controlimages)
 
 screen = pygame.display.set_mode((800, 600))
