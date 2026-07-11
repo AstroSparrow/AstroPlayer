@@ -31,7 +31,7 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(controlfont, 20)
 imagefiles = os.listdir(controlimages)
 
-screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Astro Music Player")
 
 L2 = files.copy()
