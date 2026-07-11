@@ -2,6 +2,7 @@
 **A lightweight Astronomy-Themed local Music Player built with Python on a weekend just for fun!**
 
 _**Backstory:**_ I was originally trying to make a simple python script using pygame to randomly play some of my downloaded Melodysheep music while i study. Then one thing led to another, I kept adding some features i liked, Took some help from ChatGPT and thus AstroPlayer was born!
+(I originally also bundled some music as per my choices with AstroPlayer, but had to remove it (Cause Copyright laws, Ofcourse). It was really disappointing tbh)
 
 
 ## Screenshots
