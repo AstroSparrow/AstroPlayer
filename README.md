@@ -48,7 +48,7 @@ This project is licensed under the MIT License.
 
 **Note:** AstroPlayer requires at least one supported audio file (`.mp3`, `.wav`, or `.ogg`) in one of the playlist folders to start playback.
 
--You can Download the latest pre-built executable from the **Releases** page, or run the source code using Python.
+- You can Download the latest pre-built executable from the **Releases** page, or run the source code using Python.
 
 
 _**Thanks a lot for your time! Cya later :D**_
