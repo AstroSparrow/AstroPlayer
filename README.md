@@ -32,7 +32,8 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 
 ## Customization
 - To add your own Background images, Replace or Add New `.jpg` files in the Assets/Images folder. The Program will include them automatically.
-- To edit the included Music, You can place new `.mp3` or `.wav` or `.ogg` in either of the Playlist folders under the Assets folder or remove the ones you don't like from the same. The Program will Auto-Update on the next Start.
+- To add your Music, You can place new `.mp3` or `.wav` or `.ogg` in a Playlist folder under the Assets/Playlists folder or remove the ones you don't like from the same. The Program will Auto-Update on the next Start.
+- You can further organise your songs by creating as many playlists as you like, You can do so by creating a folder inside Assets/Playlists and it will count as a New Playlist (For ex. Study, Cozy, Space etc) in the Program after a restart.
 
 
 ## Requirements
@@ -43,6 +44,13 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 
 ## License
 This project is licensed under the MIT License.
+
+(I originally also bundled some music as per my choices with AstroPlayer, but had to remove it (Cause Copyright laws, Ofcourse). It was really disappointing tbh)
+
+
+**Note:** AstroPlayer requires at least one supported audio file (`.mp3`, `.wav`, or `.ogg`) in one of the playlist folders to start playback.
+
+- You can Download the latest pre-built executable from the **Releases** page, or run the source code using Python.
 
 
 
