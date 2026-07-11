@@ -31,7 +31,7 @@ for folder in os.listdir(playlist_root):
 icon = pygame.image.load(controlicon)
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 20)
+font = pygame.font.Font(None, 30)
 imagefiles = os.listdir(controlimages)
 
 screen = pygame.display.set_mode((800, 600))
