@@ -4,6 +4,8 @@ __pycache__/
 *.pyc
 
 # PyInstaller
+*.spec
+_internal/
 build/
 dist/
 
@@ -12,3 +14,6 @@ dist/
 
 # Logs
 *.log
+
+# Executables
+*.exe

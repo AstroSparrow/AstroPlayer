@@ -29,7 +29,6 @@ icon = pygame.image.load(controlicon)
 pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
 font = pygame.font.Font(controlfont, 20)
-instructionsfont = pygame.font.Font(controlfont, 11)
 imagefiles = os.listdir(controlimages)
 
 screen = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
@@ -170,10 +169,8 @@ while running:
     name = name.replace("_", " ")
     songnametext = font.render(f"Now Playing: {name}", True, (255, 255, 255))
     volumetext = font.render(f"Volume: {int(Volume * 100)}%", True, (255, 255, 255))
-    instructionstext = instructionsfont.render(f"Controls for the Player: +/- Volume Control; Arrow Keys - Song Select; Space - Pause/Unpause; ./, - Change Playlist; Escape - Exit", True, (255, 255, 255))
     screen.blit(songnametext, (40, 300))
     screen.blit(volumetext, (600, 500))
-    screen.blit(instructionstext, (30, 20))
     song_completion = seekoffset + pygame.mixer.music.get_pos()/1000
     progress = song_completion/length
     progress = min(song_completion / length, 1)
