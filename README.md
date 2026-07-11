@@ -44,6 +44,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 
 ## License
 This project is licensed under the MIT License.
+
 (I originally also bundled some music as per my choices with AstroPlayer, but had to remove it (Cause Copyright laws, Ofcourse). It was really disappointing tbh)
 
 
