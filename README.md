@@ -13,7 +13,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 - Multiple playlists Support
 - Random Messier/Space backgrounds
 - Progress bar for the current Song
-- Seekable playback
+- Seekable playback (Via clicking the Progress Bar)
 - Global volume controls (Works even when AstroPlayer is not Focused)
 - Pause/Resume
 - Previous/Next track
