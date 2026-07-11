@@ -6,24 +6,28 @@ import keyboard
 import time
 import sys
 
-L = []
-L2 = []
-L3 = []
+#L = []
+#L2 = []
+#L3 = []
+playlistpaths = []
+currentplaylistindex = 0
+attempts = 0
 
 BASE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, "frozen", False) else __file__))
 
-controlmusic = os.path.join(BASE, "Assets", "Music")
-controlmelodysheep = os.path.join(BASE, "Assets", "Melodysheep")
+playlist_root = os.path.join(BASE, "Assets", "Playlists")
 controlimages = os.path.join(BASE, "Assets", "Images")
 controlfont = os.path.join(BASE, "Assets", "Nasalization Rg.otf")
 controlicon = os.path.join(BASE, "Assets", "Voyager Icon.png")
 
-os.chdir(controlmelodysheep)
-files = os.listdir(controlmelodysheep)
-
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
+
+for folder in os.listdir(playlist_root):
+    path = os.path.join(playlist_root, folder)
+    if (os.path.isdir(path)):
+        playlistpaths.append(path)
 
 icon = pygame.image.load(controlicon)
 pygame.display.set_icon(icon)
@@ -34,9 +38,14 @@ imagefiles = os.listdir(controlimages)
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Astro Music Player")
 
-L2 = files.copy()
-random.shuffle(L2)
-current_playlist = L2
+def Loadplaylist(index):
+    playlist = []
+    for file in os.listdir(playlistpaths[index]):
+        path = os.path.join(playlistpaths[index], file)
+        if os.path.isfile(path):
+            playlist.append(path)
+    random.shuffle(playlist)
+    return PlaylistCheck(playlist)
 
 def PlaylistCheck(current_playlist):
     newplaylist = []
@@ -45,7 +54,17 @@ def PlaylistCheck(current_playlist):
             newplaylist.append(name)
     return newplaylist
 
-current_playlist = PlaylistCheck(current_playlist)
+while attempts < len(playlistpaths):
+    current_playlist = Loadplaylist(currentplaylistindex)
+    if current_playlist:
+        break
+    currentplaylistindex += 1
+    currentplaylistindex %= len(playlistpaths)
+    attempts += 1
+
+if (attempts == len(playlistpaths)):
+    pygame.quit()
+    sys.exit(0)
 
 current_track = 0
 Volume = 1.0
@@ -61,6 +80,14 @@ def play_track(index, current_playlist):
     pygame.mixer.music.set_volume(Volume)
     pygame.mixer.music.play(fade_ms=1500)
     seekoffset = 0
+
+def NextPlaylist(step):
+    global currentplaylistindex
+    while True:
+        currentplaylistindex = (currentplaylistindex + step) % len(playlistpaths)
+        current_playlist = Loadplaylist(currentplaylistindex)
+        if current_playlist:
+            return current_playlist
 
 def LoadImage():
     z = random.choice(imagefiles)
@@ -132,24 +159,14 @@ while running:
                     pause = 0
 
                 elif (event.key == pygame.K_PERIOD):
-                    os.chdir(controlmusic)
-                    files2 = os.listdir(controlmusic)
-                    L3 = files2.copy()
-                    random.shuffle(L3)
                     current_track = 0
-                    current_playlist = L3
-                    current_playlist = PlaylistCheck(current_playlist)
+                    current_playlist = NextPlaylist(1)
                     play_track(current_track, current_playlist)
                     Background = LoadImage()
                 
                 elif (event.key == pygame.K_COMMA):
-                    os.chdir(controlmelodysheep)
-                    files = os.listdir(controlmelodysheep)
-                    L2 = files.copy()
-                    random.shuffle(L2)
                     current_track = 0
-                    current_playlist = L2
-                    current_playlist = PlaylistCheck(current_playlist)
+                    current_playlist = NextPlaylist(-1)
                     play_track(current_track, current_playlist)
                     Background = LoadImage()
 
@@ -165,12 +182,18 @@ while running:
                                           
     screen.blit(Background, (0, 0))
     screen.blit(overlay,(0,0))
-    name = os.path.splitext(current_playlist[current_track])[0]
-    name = name.replace("_", " ")
+    name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
+    name = name.replace("_", " ") 
     songnametext = font.render(f"Now Playing: {name}", True, (255, 255, 255))
     volumetext = font.render(f"Volume: {int(Volume * 100)}%", True, (255, 255, 255))
+    currentplaylistname = os.path.basename(playlistpaths[currentplaylistindex])
+    playlisttext = font.render(f"Current Playlist: {currentplaylistname}", True, (255, 255, 255))
     screen.blit(songnametext, (40, 300))
     screen.blit(volumetext, (600, 500))
+    playlisttextrect = playlisttext.get_rect()
+    playlisttextrect.centerx = screen.get_width() // 2
+    playlisttextrect.y = 20
+    screen.blit(playlisttext, playlisttextrect)
     song_completion = seekoffset + pygame.mixer.music.get_pos()/1000
     progress = song_completion/length
     progress = min(song_completion / length, 1)
