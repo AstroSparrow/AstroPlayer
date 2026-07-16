@@ -50,7 +50,7 @@ def Loadplaylist(index):
 def PlaylistCheck(current_playlist):
     newplaylist = []
     for name in current_playlist:
-        if name[-3:].lower() in ("mp3", "wav", "ogg"):
+        if (name[-3:].lower() == "mp3" or name[-3:].lower() == "wav" or name[-3:].lower() == "ogg"):
             newplaylist.append(name)
     return newplaylist
 
