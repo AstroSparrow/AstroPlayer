@@ -123,12 +123,26 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mx, my = pygame.mouse.get_pos()
 
-            if (20 <= mx <= 20 + 480 and 500 <= my <= 500 + 24):
-                fraction = (mx - 20) / 480
-                new_time = fraction * length
-                seekoffset = new_time
-                pygame.mixer.music.play(start=new_time)
-                pygame.mixer.music.set_volume(Volume)
+            if (playlist_view_bool == True):
+                if (40 <= mx <= 760):
+                    clicked_index = int(
+                        (my - 80 + playlist_scroll * 40) / 40
+                    )
+
+                    if 0 <= clicked_index < len(current_playlist):
+
+                        current_track = clicked_index
+                        play_track(current_track, current_playlist)
+
+                        playlist_view_bool = False
+                        Background = LoadImage()
+            else:
+                if (20 <= mx <= 20 + 480 and 500 <= my <= 500 + 24):
+                    fraction = (mx - 20) / 480
+                    new_time = fraction * length
+                    seekoffset = new_time
+                    pygame.mixer.music.play(start=new_time)
+                    pygame.mixer.music.set_volume(Volume)
 
         elif (event.type == pygame.KEYDOWN):
                 if event.key == pygame.K_RIGHT:
@@ -175,13 +189,14 @@ while running:
                 elif (event.key == pygame.K_l):
                     playlist_view_bool = not playlist_view_bool
                     playlist_scroll = 0
-                    
+
+                '''   
                 elif (event.key == pygame.K_DOWN and playlist_view_bool == True):
-                    playlist_scroll = playlist_scroll - 1
+                    playlist_scroll = playlist_scroll + 1
                 
                 elif (event.key == pygame.K_UP and playlist_view_bool == True):
-                    playlist_scroll = playlist_scroll + 1
-
+                    playlist_scroll = playlist_scroll - 1
+                '''
     if (keyboard.is_pressed('plus')):
         time.sleep(0.1)
         Volume = min(Volume + 0.1, 1.0)
@@ -191,9 +206,20 @@ while running:
         time.sleep(0.1)
         Volume = max(Volume - 0.1, 0.0)
         pygame.mixer.music.set_volume(Volume)
+        
+    elif (keyboard.is_pressed('up') and playlist_view_bool == True):
+        playlist_scroll = playlist_scroll - 1
+        time.sleep(0.1)
+        
+    elif (keyboard.is_pressed('down') and playlist_view_bool == True):
+        playlist_scroll = playlist_scroll + 1
+        time.sleep(0.1)
 
     screen.blit(Background, (0, 0))
-    screen.blit(overlay,(0,0))        
+    screen.blit(overlay,(0,0))
+    if playlist_view_bool:
+        max_scroll = max(0, len(current_playlist) - 10)
+        playlist_scroll = max(0, min(playlist_scroll, max_scroll))
     song_name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
     song_name = song_name.replace("_", " ") 
     songnametext = font.render(f"Now Playing: {song_name}", True, (255, 255, 255))
@@ -232,30 +258,32 @@ True,
         Playlist_View_Heading_Rect.centerx = screen.get_width() // 2
         Playlist_View_Heading_Rect.y = 20
         screen.blit(Playlist_View_Heading, Playlist_View_Heading_Rect)
+        pygame.draw.line(screen, (255, 255, 255), (0, 70), (800, 70))
         
         song_queue = current_playlist
-        song_queue_y = 120
-        for song in song_queue:
-            i = 1
+        song_queue_y = 80
+        i = 1
+        for index, song in enumerate(song_queue):
             song_name_queue = os.path.splitext(os.path.basename(song))[0]
             song_name_queue = song_name_queue.replace("_", " ")
-            if (song_name_queue == song_name):
-                song_name_queue = font.render(f"{i}. {song_name_queue} - Now Playing", True, (255, 255, 255))
+            if song_name_queue == song_name:
+                song_text = font.render(f"{i}. {song_name_queue} - Now Playing", True, (255, 255, 255))
             else:
-                song_name_queue = font.render(f"{i}. {song_name_queue}", True, (255, 255, 255))
-            screen.blit(song_name_queue, (40, song_queue_y))
-            song_queue_y = song_queue_y + 40
-            i = i + 1
+                song_text = font.render(f"{i}. {song_name_queue}", True, (255, 255, 255))
+            y = 80 + (index * 40) - (playlist_scroll * 40)
+            if (70 <= y <= 600):
+                screen.blit(song_text, (40, y))
+            i += 1
             #if (i > 10):
-                #break     
+                #break
         
     else:
         screen.blit(songnametext, (40, 300))
-        screen.blit(volumetext, (600, 500))
+        screen.blit(volumetext, (600, 510))
         screen.blit(playlisttext, playlisttextrect)
-        screen.blit(time_text, (20, 530))
-        pygame.draw.rect(screen, (70,70,70), (20,500,500,24), border_radius=10)
-        pygame.draw.rect(screen, (255,255,255), (20,500,filled,24), border_radius=10)
+        screen.blit(time_text, (20, 540))
+        pygame.draw.rect(screen, (70,70,70), (20,510,510,24), border_radius=10)
+        pygame.draw.rect(screen, (255,255,255), (20,510,filled,24), border_radius=10)
 
     clock.tick(20)
     pygame.display.flip()

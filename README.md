@@ -18,6 +18,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 - Pause/Resume
 - Previous/Next track
 - Automatic playlist shuffling
+- A Playlist View with Selectable Songs (Click Song names to play)
 
 
 ## Controls
@@ -27,6 +28,8 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 | Space | Pause / Resume |
 | + / - | Global Volume Control |
 | , / . | Switch Playlists |
+| L | Toggle Playlist View |
+| ↑ / ↓ | Scroll Playlist View |
 | Esc | Exit |
 
 
