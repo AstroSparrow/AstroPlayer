@@ -7,6 +7,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 ## Screenshots
 ![AstroPlayer Screenshot 1](Screenshot-1.png)
 ![AstroPlayer Screenshot 2](Screenshot-2.png)
+![AstroPlayer Screenshot (Playlist View)](Screenshot-3.png)
 
 
 ## Features
