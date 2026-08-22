@@ -217,7 +217,7 @@ while running:
 
     screen.blit(Background, (0, 0))
     screen.blit(overlay,(0,0))
-    if playlist_view_bool:
+    if (playlist_view_bool == True):
         max_scroll = max(0, len(current_playlist) - 10)
         playlist_scroll = max(0, min(playlist_scroll, max_scroll))
     song_name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
@@ -253,7 +253,7 @@ True,
     filled = progress * 500
 
     if (playlist_view_bool == True):
-        Playlist_View_Heading = font.render("Playlist View", True, (255, 255, 255))
+        Playlist_View_Heading = font.render(f"Playlist View for {currentplaylistname}", True, (255, 255, 255))
         Playlist_View_Heading_Rect = Playlist_View_Heading.get_rect()
         Playlist_View_Heading_Rect.centerx = screen.get_width() // 2
         Playlist_View_Heading_Rect.y = 20
@@ -267,7 +267,7 @@ True,
             song_name_queue = os.path.splitext(os.path.basename(song))[0]
             song_name_queue = song_name_queue.replace("_", " ")
             if song_name_queue == song_name:
-                song_text = font.render(f"{i}. {song_name_queue} - Now Playing", True, (255, 255, 255))
+                song_text = font.render(f"{i}. {song_name_queue} - Now Playing", True, (253, 208, 23))
             else:
                 song_text = font.render(f"{i}. {song_name_queue}", True, (255, 255, 255))
             y = 80 + (index * 40) - (playlist_scroll * 40)
