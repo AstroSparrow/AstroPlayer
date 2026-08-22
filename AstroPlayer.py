@@ -15,7 +15,7 @@ attempts = 0
 
 BASE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, "frozen", False) else __file__))
 
-playlist_root = os.path.join(BASE, "Assets", "Playlists")
+playlist_root_complex = os.path.join(BASE, "Assets", "Playlists")
 controlfont = os.path.join(BASE, "Assets", "Orbitron-Regular.ttf")
 controlimages = os.path.join(BASE, "Assets", "Images")
 controlicon = os.path.join(BASE, "Assets", "Voyager Icon.png")
@@ -24,8 +24,8 @@ pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 
-for folder in os.listdir(playlist_root):
-    path = os.path.join(playlist_root, folder)
+for folder in os.listdir(playlist_root_complex):
+    path = os.path.join(playlist_root_complex, folder)
     if (os.path.isdir(path)):
         playlistpaths.append(path)
 
@@ -69,6 +69,8 @@ if (attempts == len(playlistpaths)):
 current_track = 0
 Volume = 1.0
 seekoffset = 0
+playlist_view_bool = False
+playlist_scroll = 0
 MUSIC_END = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(MUSIC_END)
 pause = 0
@@ -148,7 +150,7 @@ while running:
                     Background = LoadImage()
 
                 elif event.key == pygame.K_ESCAPE:
-                     running = False
+                    running = False
 
                 elif (event.key == pygame.K_SPACE and pause == 0):
                     pygame.mixer.music.pause()
@@ -169,6 +171,16 @@ while running:
                     current_playlist = NextPlaylist(-1)
                     play_track(current_track, current_playlist)
                     Background = LoadImage()
+                    
+                elif (event.key == pygame.K_l):
+                    playlist_view_bool = not playlist_view_bool
+                    playlist_scroll = 0
+                    
+                elif (event.key == pygame.K_DOWN and playlist_view_bool == True):
+                    playlist_scroll = playlist_scroll - 1
+                
+                elif (event.key == pygame.K_UP and playlist_view_bool == True):
+                    playlist_scroll = playlist_scroll + 1
 
     if (keyboard.is_pressed('plus')):
         time.sleep(0.1)
@@ -179,27 +191,30 @@ while running:
         time.sleep(0.1)
         Volume = max(Volume - 0.1, 0.0)
         pygame.mixer.music.set_volume(Volume)
-                                          
+
     screen.blit(Background, (0, 0))
-    screen.blit(overlay,(0,0))
-    name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
-    name = name.replace("_", " ") 
-    songnametext = font.render(f"Now Playing: {name}", True, (255, 255, 255))
+    screen.blit(overlay,(0,0))        
+    song_name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
+    song_name = song_name.replace("_", " ") 
+    songnametext = font.render(f"Now Playing: {song_name}", True, (255, 255, 255))
     volumetext = font.render(f"Volume: {int(Volume * 100)}%", True, (255, 255, 255))
     currentplaylistname = os.path.basename(playlistpaths[currentplaylistindex])
     playlisttext = font.render(f"Current Playlist: {currentplaylistname}", True, (255, 255, 255))
-    screen.blit(songnametext, (40, 300))
-    screen.blit(volumetext, (600, 500))
     playlisttextrect = playlisttext.get_rect()
     playlisttextrect.centerx = screen.get_width() // 2
     playlisttextrect.y = 20
-    screen.blit(playlisttext, playlisttextrect)
+    playlist_view_scroll_limit = -(len(current_playlist) // 10) - 1
+    '''
+    if (playlist_scroll > 0):
+        playlist_scroll = 0
+    if (playlist_scroll < playlist_view_scroll_limit):
+        playlist_scroll = playlist_view_scroll_limit
+    '''
     song_completion = seekoffset + pygame.mixer.music.get_pos()/1000
     progress = song_completion/length
     progress = min(song_completion / length, 1)
     elapsed_min = int(song_completion // 60)
     elapsed_sec = int(song_completion % 60)
-
     length_min = int(length // 60)
     length_sec = int(length % 60)
 
@@ -209,10 +224,38 @@ True,
 (255, 255, 255)
 )
 
-    screen.blit(time_text, (20, 530))
     filled = progress * 500
-    pygame.draw.rect(screen, (70,70,70), (20,500,500,24), border_radius=10)
-    pygame.draw.rect(screen, (255,255,255), (20,500,filled,24), border_radius=10)
+
+    if (playlist_view_bool == True):
+        Playlist_View_Heading = font.render("Playlist View", True, (255, 255, 255))
+        Playlist_View_Heading_Rect = Playlist_View_Heading.get_rect()
+        Playlist_View_Heading_Rect.centerx = screen.get_width() // 2
+        Playlist_View_Heading_Rect.y = 20
+        screen.blit(Playlist_View_Heading, Playlist_View_Heading_Rect)
+        
+        song_queue = current_playlist
+        song_queue_y = 120
+        for song in song_queue:
+            i = 1
+            song_name_queue = os.path.splitext(os.path.basename(song))[0]
+            song_name_queue = song_name_queue.replace("_", " ")
+            if (song_name_queue == song_name):
+                song_name_queue = font.render(f"{i}. {song_name_queue} - Now Playing", True, (255, 255, 255))
+            else:
+                song_name_queue = font.render(f"{i}. {song_name_queue}", True, (255, 255, 255))
+            screen.blit(song_name_queue, (40, song_queue_y))
+            song_queue_y = song_queue_y + 40
+            i = i + 1
+            #if (i > 10):
+                #break     
+        
+    else:
+        screen.blit(songnametext, (40, 300))
+        screen.blit(volumetext, (600, 500))
+        screen.blit(playlisttext, playlisttextrect)
+        screen.blit(time_text, (20, 530))
+        pygame.draw.rect(screen, (70,70,70), (20,500,500,24), border_radius=10)
+        pygame.draw.rect(screen, (255,255,255), (20,500,filled,24), border_radius=10)
 
     clock.tick(20)
     pygame.display.flip()
