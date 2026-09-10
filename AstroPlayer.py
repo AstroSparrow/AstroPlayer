@@ -257,7 +257,7 @@ True,
     filled = progress * 500
 
     if (playlist_view_bool == True):
-        Playlist_View_Heading = controlfontactual.render(f"Playlist View for {currentplaylistname}", True, (255, 255, 255))
+        Playlist_View_Heading = controlfontactual.render(f"Playlist View for {currentplaylistname}", True, (136, 231, 136))
         Playlist_View_Heading_Rect = Playlist_View_Heading.get_rect()
         Playlist_View_Heading_Rect.centerx = screen.get_width() // 2
         Playlist_View_Heading_Rect.y = 20
