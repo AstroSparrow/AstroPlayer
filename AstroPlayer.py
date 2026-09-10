@@ -29,10 +29,10 @@ for folder in os.listdir(playlist_root_complex):
     if (os.path.isdir(path)):
         playlistpaths.append(path)
 
-icon = pygame.image.load(controlicon)
-pygame.display.set_icon(icon)
-clock = pygame.time.Clock()
-font = pygame.font.Font(controlfont, 20)
+controlicon = pygame.image.load(controlicon)
+pygame.display.set_icon(controlicon)
+controlclock = pygame.time.Clock()
+controlfontactual = pygame.font.Font(controlfont, 20)
 imagefiles = os.listdir(controlimages)
 
 screen = pygame.display.set_mode((800, 600))
@@ -222,13 +222,17 @@ while running:
         playlist_scroll = max(0, min(playlist_scroll, max_scroll))
     song_name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
     song_name = song_name.replace("_", " ") 
-    songnametext = font.render(f"Now Playing: {song_name}", True, (255, 255, 255))
-    volumetext = font.render(f"Volume: {int(Volume * 100)}%", True, (255, 255, 255))
+    controlsongnametext = controlfontactual.render("Now Playing: ", True, (218, 177, 218))
+    songnameactual = controlfontactual.render(song_name, True, (255, 255, 255))
+    volumetext = controlfontactual.render(f"Volume: {int(Volume * 100)}%", True, (100, 190, 255))
     currentplaylistname = os.path.basename(playlistpaths[currentplaylistindex])
-    playlisttext = font.render(f"Current Playlist: {currentplaylistname}", True, (255, 255, 255))
-    playlisttextrect = playlisttext.get_rect()
+    controlplaylisttext = controlfontactual.render("Current Playlist: ", True, (136, 231, 136))
+    playlisttextactual = controlfontactual.render(currentplaylistname, True, (255, 255, 255))
+    playlisttextunittotalwidth = controlplaylisttext.get_width() + playlisttextactual.get_width()
+    starting_x_forplaylisttextunit = (screen.get_width() - playlisttextunittotalwidth) // 2
+    '''playlisttextrect = controlplaylisttext.get_rect()
     playlisttextrect.centerx = screen.get_width() // 2
-    playlisttextrect.y = 20
+    playlisttextrect.y = 20'''
     playlist_view_scroll_limit = -(len(current_playlist) // 10) - 1
     '''
     if (playlist_scroll > 0):
@@ -244,7 +248,7 @@ while running:
     length_min = int(length // 60)
     length_sec = int(length % 60)
 
-    time_text = font.render(
+    time_text = controlfontactual.render(
 f"{elapsed_min}:{elapsed_sec:02} / {length_min}:{length_sec:02}",
 True,
 (255, 255, 255)
@@ -253,7 +257,7 @@ True,
     filled = progress * 500
 
     if (playlist_view_bool == True):
-        Playlist_View_Heading = font.render(f"Playlist View for {currentplaylistname}", True, (255, 255, 255))
+        Playlist_View_Heading = controlfontactual.render(f"Playlist View for {currentplaylistname}", True, (255, 255, 255))
         Playlist_View_Heading_Rect = Playlist_View_Heading.get_rect()
         Playlist_View_Heading_Rect.centerx = screen.get_width() // 2
         Playlist_View_Heading_Rect.y = 20
@@ -267,9 +271,9 @@ True,
             song_name_queue = os.path.splitext(os.path.basename(song))[0]
             song_name_queue = song_name_queue.replace("_", " ")
             if song_name_queue == song_name:
-                song_text = font.render(f"{i}. {song_name_queue} - Now Playing", True, (253, 208, 23))
+                song_text = controlfontactual.render(f"{i}. {song_name_queue} - Now Playing", True, (253, 208, 23))
             else:
-                song_text = font.render(f"{i}. {song_name_queue}", True, (255, 255, 255))
+                song_text = controlfontactual.render(f"{i}. {song_name_queue}", True, (255, 255, 255))
             y = 80 + (index * 40) - (playlist_scroll * 40)
             if (70 <= y <= 600):
                 screen.blit(song_text, (40, y))
@@ -278,14 +282,18 @@ True,
                 #break
         
     else:
-        screen.blit(songnametext, (40, 300))
+        screen.blit(controlsongnametext, (40, 300))
+        screen.blit(songnameactual, (184, 300))
         screen.blit(volumetext, (600, 510))
-        screen.blit(playlisttext, playlisttextrect)
+        #screen.blit(controlplaylisttext, playlisttextrect)
+        screen.blit(controlplaylisttext, (starting_x_forplaylisttextunit, 20))
+        screen.blit(playlisttextactual, (starting_x_forplaylisttextunit + controlplaylisttext.get_width(), 20))
+        #screen.blit(playlisttextactual, (414, 20))
         screen.blit(time_text, (20, 540))
         pygame.draw.rect(screen, (70,70,70), (20,510,510,24), border_radius=10)
         pygame.draw.rect(screen, (255,255,255), (20,510,filled,24), border_radius=10)
 
-    clock.tick(20)
+    controlclock.tick(20)
     pygame.display.flip()
 
 pygame.quit()
