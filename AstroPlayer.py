@@ -12,6 +12,7 @@ import sys
 playlistpaths = []
 currentplaylistindex = 0
 attempts = 0
+
 MessierNames = {'M1': 'Crab Nebula', 'M2': 'NGC 7089', 'M3': 'NGC 5272', 'M4': 'NGC 6121', 'M5': 'NGC 5904', 'M6': 'Butterfly Cluster', 'M7': "Ptolemy's Cluster", 'M8': 'Lagoon Nebula', 'M9': 'NGC 6333', 'M10': 'NGC 6254', 'M11': 'Wild Duck Cluster', 'M12': 'NGC 6218', 'M13': 'Hercules Globular Cluster', 'M14': 'NGC 6402', 'M15': 'NGC 7078', 'M16': 'Eagle Nebula Cluster', 'M17': 'Omega Nebula', 'M18': 'NGC 6613', 'M19': 'NGC 6273', 'M20': 'Trifid Nebula', 'M21': 'NGC 6531', 'M22': 'NGC 6656', 'M23': 'NGC 6494', 'M24': 'Milky Way Patch', 'M25': 'IC 4725', 'M26': 'NGC 6694', 'M27': 'Dumbbell Nebula', 'M28': 'NGC 6626', 'M29': 'NGC 6913', 'M30': 'NGC 7099', 'M31': 'Andromeda Galaxy', 'M32': 'Satellite of M31', 'M33': 'Triangulum Galaxy', 'M34': 'NGC 1039', 'M35': 'NGC 2168', 'M36': 'NGC 1960', 'M37': 'NGC 2099', 'M38': 'NGC 1912', 'M39': 'NGC 7092', 'M40': 'Winecke 4', 'M41': 'NGC 2287', 'M42': 'Orion Nebula', 'M43': "de Mairan's Nebula", 'M44': 'Beehive Cluster', 'M45': 'Pleiades', 'M46': 'NGC 2437', 'M47': 'NGC 2422', 'M48': 'NGC 2548', 'M49': 'NGC 4472', 'M50': 'NGC 2323', 'M51': 'Whirlpool Galaxy', 'M52': 'NGC 7654', 'M53': 'NGC 5024', 'M54': 'NGC 6715', 'M55': 'NGC 6809', 'M56': 'NGC 6779', 'M57': 'Ring Nebula', 'M58': 'NGC 4579', 'M59': 'NGC 4621', 'M60': 'NGC 4649', 'M61': 'NGC 4303', 'M62': 'NGC 6266', 'M63': 'Sunflower Galaxy', 'M64': 'Blackeye Galaxy', 'M65': 'NGC 3623', 'M66': 'NGC 3627', 'M67': 'NGC 2682', 'M68': 'NGC 4590', 'M69': 'NGC 6637', 'M70': 'NGC 6681', 'M71': 'NGC 6838', 'M72': 'NGC 6981', 'M73': 'Group of 4 stars', 'M74': 'NGC 628', 'M75': 'NGC 6864', 'M76': 'Little Dumbbell Nebula', 'M77': 'Cetus A', 'M78': 'NGC 2068', 'M79': 'NGC 1904', 'M80': 'NGC 6093', 'M81': "Bode's Galaxy", 'M82': 'Cigar Galaxy', 'M83': 'Southern Pinwheel Galaxy', 'M84': 'NGC 4374', 'M85': 'NGC 4382', 'M86': 'NGC 4406', 'M87': 'Virgo A', 'M88': 'NGC 4501', 'M89': 'NGC 4552', 'M90': 'NGC 4569', 'M91': 'NGC 4548', 'M92': 'NGC 6341', 'M93': 'NGC 2447', 'M94': 'NGC 4736', 'M95': 'NGC 3351', 'M96': 'NGC 3368', 'M97': 'Owl Nebula', 'M98': 'NGC 4192', 'M99': 'NGC 4254', 'M100': 'NGC 4321', 'M101': 'Pinwheel Galaxy', 'M102': 'Spindle Galaxy', 'M103': 'NGC 581', 'M104': 'Sombrero Galaxy', 'M105': 'NGC 3379', 'M106': 'NGC 4258', 'M107': 'NGC 6171', 'M108': 'NGC 3556', 'M109': 'NGC 3992', 'M110': 'Satellite of M31'}
 
 BASE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, "frozen", False) else __file__))
@@ -231,13 +232,12 @@ while running:
     ImageName = ImageName.replace("_", " ")
     ImageName = ImageName.replace(".jpg", "")
     ImageName = ImageName.replace(".png", "")
-    try:
-        if (ImageName.find("Messier") != -1):
-            MessierNameLength = len(ImageName)
-            MessierNumber = ImageName[8:MessierNameLength + 1]
-            MessierNameActual = MessierNames[f"M{MessierNumber}"]
-            ImageNameText = controlfontactual.render(f"{ImageName}: {MessierNameActual}",  True, (255, 255, 255))
-    except:
+    if ("Messier" in ImageName):
+        MessierNameLength = len(ImageName)
+        MessierNumber = ImageName[8:MessierNameLength + 1]
+        MessierNameActual = MessierNames[f"M{MessierNumber}"]
+        ImageNameText = controlfontactual.render(f"{ImageName}: {MessierNameActual}",  True, (255, 255, 255))
+    else:
         ImageNameText = controlfontactual.render(ImageName,  True, (255, 255, 255))
     ImageNameText.set_alpha(200)
     currentplaylistname = os.path.basename(playlistpaths[currentplaylistindex])
