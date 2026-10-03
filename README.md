@@ -46,6 +46,12 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 - Or download the pre-built executable from the Releases page.
 
 
+## Current Feature list to be Implemeneted into the Player
+1. [x] A Selectable Playlist View 
+2. [ ] A Nightcore/Slowed Mode that changes the Audio Playback and the Background Images
+3. [ ] A Disco Mode that makes the Background images react with the Music
+
+
 ## License
 This project is licensed under the MIT License.
 
