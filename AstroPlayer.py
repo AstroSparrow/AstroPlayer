@@ -92,6 +92,7 @@ def NextPlaylist(step):
             return current_playlist
 
 def LoadImage():
+    global z
     z = random.choice(imagefiles)
     Messier = Image.open(os.path.join(BASE, "Assets", "Images", z))
     Messier = Messier.resize((800, 600), Image.LANCZOS)
@@ -225,11 +226,19 @@ while running:
     controlsongnametext = controlfontactual.render("Now Playing: ", True, (218, 177, 218))
     songnameactual = controlfontactual.render(song_name, True, (255, 255, 255))
     volumetext = controlfontactual.render(f"Volume: {int(Volume * 100)}%", True, (100, 190, 255))
+    ImageName = z
+    ImageName = ImageName.replace("_", " ")
+    ImageName = ImageName.replace(".jpg", "")
+    ImageName = ImageName.replace(".png", "")
+    ImageNameText = controlfontactual.render(ImageName,  True, (255, 255, 255))
+    ImageNameText.set_alpha(200)
     currentplaylistname = os.path.basename(playlistpaths[currentplaylistindex])
     controlplaylisttext = controlfontactual.render("Current Playlist: ", True, (136, 231, 136))
     playlisttextactual = controlfontactual.render(currentplaylistname, True, (255, 255, 255))
     playlisttextunittotalwidth = controlplaylisttext.get_width() + playlisttextactual.get_width()
     starting_x_forplaylisttextunit = (screen.get_width() - playlisttextunittotalwidth) // 2
+    ImageNameTextTotalWidth = ImageNameText.get_width()
+    Starting_X_ForImageNameText = (screen.get_width() - ImageNameTextTotalWidth) // 2
     '''playlisttextrect = controlplaylisttext.get_rect()
     playlisttextrect.centerx = screen.get_width() // 2
     playlisttextrect.y = 20'''
@@ -283,6 +292,7 @@ True,
         
     else:
         screen.blit(controlsongnametext, (40, 300))
+        screen.blit(ImageNameText, (Starting_X_ForImageNameText, 560))
         screen.blit(songnameactual, (184, 300))
         screen.blit(volumetext, (600, 510))
         #screen.blit(controlplaylisttext, playlisttextrect)
