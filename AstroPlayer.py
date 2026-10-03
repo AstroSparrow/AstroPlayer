@@ -37,7 +37,7 @@ controlfontactual = pygame.font.Font(controlfont, 20)
 imagefiles = os.listdir(controlimages)
 
 screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Astro Music Player")
+pygame.display.set_caption("AstroPlayer")
 
 def Loadplaylist(index):
     playlist = []
