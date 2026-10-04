@@ -36,7 +36,6 @@ pygame.display.set_icon(controlicon)
 controlclock = pygame.time.Clock()
 controlfontactual = pygame.font.Font(controlfont, 20)
 imagefiles = os.listdir(controlimages)
-
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("AstroPlayer")
 
@@ -235,8 +234,11 @@ while running:
     if ("Messier" in ImageName):
         MessierNameLength = len(ImageName)
         MessierNumber = ImageName[8:MessierNameLength + 1]
-        MessierNameActual = MessierNames[f"M{MessierNumber}"]
-        ImageNameText = controlfontactual.render(f"{ImageName}: {MessierNameActual}",  True, (255, 255, 255))
+        if (f"M{MessierNumber}" in MessierNames):
+            MessierNameActual = MessierNames[f"M{MessierNumber}"]
+            ImageNameText = controlfontactual.render(f"{ImageName}: {MessierNameActual}",  True, (255, 255, 255))
+        else:
+            ImageNameText = controlfontactual.render(ImageName,  True, (255, 255, 255))
     else:
         ImageNameText = controlfontactual.render(ImageName,  True, (255, 255, 255))
     ImageNameText.set_alpha(200)
