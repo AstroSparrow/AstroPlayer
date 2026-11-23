@@ -29,7 +29,8 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 | Space | Pause / Resume |
 | + / - | Global Volume Control |
 | , / . | Switch Playlists |
-| L | Toggle Playlist View |
+| P | Toggle Playlist View |
+| L | Toggle Current Song Looping |
 | ↑ / ↓ | Scroll Playlist View |
 | Esc | Exit |
 

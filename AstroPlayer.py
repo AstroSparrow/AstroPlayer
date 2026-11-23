@@ -5,6 +5,9 @@ from PIL import Image
 import keyboard
 import time
 import sys
+import soundfile
+import numpy
+from pedalboard import time_stretch, Pedalboard, Reverb
 
 #L = []
 #L2 = []
@@ -71,6 +74,7 @@ current_track = 0
 Volume = 1.0
 seekoffset = 0
 playlist_view_bool = False
+loop_bool = False
 playlist_scroll = 0
 MUSIC_END = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(MUSIC_END)
@@ -81,7 +85,7 @@ def play_track(index, current_playlist):
     pygame.mixer.music.load(current_playlist[index])
     length = pygame.mixer.Sound(current_playlist[index]).get_length()
     pygame.mixer.music.set_volume(Volume)
-    pygame.mixer.music.play(fade_ms=1500)
+    pygame.mixer.music.play(fade_ms=2000)
     seekoffset = 0
 
 def NextPlaylist(step):
@@ -114,13 +118,17 @@ while running:
             running = False
 
         elif event.type == MUSIC_END:
-            current_track += 1
-            if current_track >= len(current_playlist):
-                random.shuffle(current_playlist)
-                current_track = 0
-                current_playlist = PlaylistCheck(current_playlist)
-            play_track(current_track, current_playlist)
-            Background = LoadImage()
+            if (loop_bool == False):
+                current_track += 1
+                if current_track >= len(current_playlist):
+                    random.shuffle(current_playlist)
+                    current_track = 0
+                    current_playlist = PlaylistCheck(current_playlist)
+                play_track(current_track, current_playlist)
+                Background = LoadImage()
+            elif (loop_bool == True):
+                play_track(current_track, current_playlist)
+                Background = LoadImage()
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mx, my = pygame.mouse.get_pos()
@@ -147,58 +155,61 @@ while running:
                     pygame.mixer.music.set_volume(Volume)
 
         elif (event.type == pygame.KEYDOWN):
-                if event.key == pygame.K_RIGHT:
-                    current_track = current_track + 1
-                    if current_track >= len(current_playlist):
-                            random.shuffle(current_playlist)
-                            current_track = 0
-                            current_playlist = PlaylistCheck(current_playlist)
-                    play_track(current_track, current_playlist)
-                    Background = LoadImage()
-
-                elif event.key == pygame.K_LEFT:
-                    current_track = current_track - 1
-                    if current_track < 0:
-                            random.shuffle(current_playlist)
-                            current_track = 0
-                            current_playlist = PlaylistCheck(current_playlist)
-                    play_track(current_track, current_playlist)
-                    Background = LoadImage()
-
-                elif event.key == pygame.K_ESCAPE:
-                    running = False
-
-                elif (event.key == pygame.K_SPACE and pause == 0):
-                    pygame.mixer.music.pause()
-                    pause = 1
-
-                elif ((event.key == pygame.K_SPACE and pause == 1)):
-                    pygame.mixer.music.unpause()
-                    pause = 0
-
-                elif (event.key == pygame.K_PERIOD):
+            if event.key == pygame.K_RIGHT:
+                current_track = current_track + 1
+                if current_track >= len(current_playlist):
+                    random.shuffle(current_playlist)
                     current_track = 0
-                    current_playlist = NextPlaylist(1)
-                    play_track(current_track, current_playlist)
-                    Background = LoadImage()
-                
-                elif (event.key == pygame.K_COMMA):
-                    current_track = 0
-                    current_playlist = NextPlaylist(-1)
-                    play_track(current_track, current_playlist)
-                    Background = LoadImage()
-                    
-                elif (event.key == pygame.K_l):
-                    playlist_view_bool = not playlist_view_bool
-                    playlist_scroll = 0
+                    current_playlist = PlaylistCheck(current_playlist)
+                play_track(current_track, current_playlist)
+                Background = LoadImage()
 
-                '''   
-                elif (event.key == pygame.K_DOWN and playlist_view_bool == True):
-                    playlist_scroll = playlist_scroll + 1
+            elif event.key == pygame.K_LEFT:
+                current_track = current_track - 1
+                if current_track < 0:
+                    random.shuffle(current_playlist)
+                    current_track = 0
+                    current_playlist = PlaylistCheck(current_playlist)
+                play_track(current_track, current_playlist)
+                Background = LoadImage()
+
+            elif event.key == pygame.K_ESCAPE:
+                running = False
+
+            elif (event.key == pygame.K_SPACE and pause == 0):
+                pygame.mixer.music.pause()
+                pause = 1
+
+            elif ((event.key == pygame.K_SPACE and pause == 1)):
+                pygame.mixer.music.unpause()
+                pause = 0
+
+            elif (event.key == pygame.K_PERIOD):
+                current_track = 0
+                current_playlist = NextPlaylist(1)
+                play_track(current_track, current_playlist)
+                Background = LoadImage()
+            
+            elif (event.key == pygame.K_COMMA):
+                current_track = 0
+                current_playlist = NextPlaylist(-1)
+                play_track(current_track, current_playlist)
+                Background = LoadImage()
                 
-                elif (event.key == pygame.K_UP and playlist_view_bool == True):
-                    playlist_scroll = playlist_scroll - 1
-                '''
+            elif (event.key == pygame.K_p):
+                playlist_view_bool = not playlist_view_bool
+                playlist_scroll = 0
+                
+            elif (event.key == pygame.K_l):
+                loop_bool = not loop_bool
+
+            '''   
+            elif (event.key == pygame.K_DOWN and playlist_view_bool == True):
+                playlist_scroll = playlist_scroll + 1
+            
+            elif (event.key == pygame.K_UP and playlist_view_bool == True):
+                playlist_scroll = playlist_scroll - 1
+            '''
     if (keyboard.is_pressed('plus')):
         time.sleep(0.1)
         Volume = min(Volume + 0.1, 1.0)
@@ -225,6 +236,8 @@ while running:
     song_name = os.path.splitext(os.path.basename(current_playlist[current_track]))[0]
     song_name = song_name.replace("_", " ") 
     controlsongnametext = controlfontactual.render("Now Playing: ", True, (218, 177, 218))
+    LoopingText = controlfontactual.render("(Looping Current Song)", True, (253, 208, 23))
+    LoopingText.set_alpha(180)
     songnameactual = controlfontactual.render(song_name, True, (255, 255, 255))
     volumetext = controlfontactual.render(f"Volume: {int(Volume * 100)}%", True, (100, 190, 255))
     ImageName = z
@@ -302,6 +315,8 @@ True,
         
     else:
         screen.blit(controlsongnametext, (40, 300))
+        if (loop_bool == True):
+            screen.blit(LoopingText, (40, 270))
         screen.blit(ImageNameText, (Starting_X_ForImageNameText, 560))
         screen.blit(songnameactual, (184, 300))
         screen.blit(volumetext, (600, 510))
