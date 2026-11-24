@@ -81,17 +81,36 @@ playlist_view_bool = False
 loop_bool = False
 AudioEffectsIdentifier_Nightcore_Bool = False
 AudioEffectsIdentifier_Slowed_Bool = False
+#StandbyForProcessingText_Bool = False
 #Nightcore_Warning_Bool = False
 #Slowed_Warning_Bool = False
 playlist_scroll = 0
 MUSIC_END = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(MUSIC_END)
 pause = 0
+'''
+def ShowStandbyMessage():
+    StandbyText = controlfontactual.render(
+        "Please Standby for a moment, The Audio is being Processed...",
+        True,
+        (255, 0, 0)
+    )
 
+    screen.blit(Background, (0, 0))
+    screen.blit(overlay, (0, 0))
+
+    text_rect = StandbyText.get_rect(center=(400, 330))
+    screen.blit(StandbyText, text_rect)
+
+    pygame.display.flip()
+'''
 def play_track(index, current_playlist):
     global length
     global seekoffset
-    
+    '''
+    if (StandbyForProcessingText_Bool == True):
+        screen.blit(StandbyText, (40, 330))
+    '''
     sourcesong = current_playlist[index]
     
     if (AudioEffectsIdentifier_Nightcore_Bool == False and AudioEffectsIdentifier_Slowed_Bool == False):
@@ -197,6 +216,7 @@ while running:
     '''
     AudioEffectsWarning_Nightcore = controlfontactual.render("Please Disable Nightcore Mode first...", True, (255, 0, 0))
     AudioEffectsWarning_Slowed = controlfontactual.render("Please Disable Slowed+Reverb Mode first...", True, (255, 0, 0))
+    StandbyText = controlfontactual.render("Please Standby for a moment, The Audio is being Processed...", True, (255, 0, 0))
     '''
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -439,5 +459,12 @@ True,
     controlclock.tick(20)
     pygame.display.flip()
 
+pygame.mixer.music.stop()
+pygame.mixer.music.unload()
+for cached_file in os.listdir(audio_processing_root_complex):
+    cached_path = os.path.join(audio_processing_root_complex, cached_file)
+
+    if os.path.isfile(cached_path):
+        os.remove(cached_path)
 pygame.quit()
 sys.exit(0)
