@@ -24,6 +24,7 @@ audio_processing_root_complex = os.path.join(BASE, "Assets", "Playlists", "Audio
 controlfont = os.path.join(BASE, "Assets", "Orbitron-Regular.ttf")
 controlimages = os.path.join(BASE, "Assets", "Images")
 controlicon = os.path.join(BASE, "Assets", "Voyager Icon.png")
+os.makedirs(audio_processing_root_complex, exist_ok=True)
 
 pygame.init()
 pygame.font.init()
@@ -33,7 +34,7 @@ for folder in os.listdir(playlist_root_complex):
     path = os.path.join(playlist_root_complex, folder)
     if (os.path.isdir(path)):
         playlistpaths.append(path)
-playlistpaths.remove("t:\\GitHub Repositories\\AstroPlayer\\Assets\\Playlists\\AudioProcessingTempFiles") #Removing the Processing Directory from the Playlists List, Else bad things would happen...
+playlistpaths.remove(audio_processing_root_complex) #Removing the Processing Directory from the Playlists List, Else bad things would happen...
 
 controlicon = pygame.image.load(controlicon)
 pygame.display.set_icon(controlicon)
@@ -78,6 +79,10 @@ Volume = 1.0
 seekoffset = 0
 playlist_view_bool = False
 loop_bool = False
+AudioEffectsIdentifier_Nightcore_Bool = False
+AudioEffectsIdentifier_Slowed_Bool = False
+#Nightcore_Warning_Bool = False
+#Slowed_Warning_Bool = False
 playlist_scroll = 0
 MUSIC_END = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(MUSIC_END)
@@ -118,29 +123,14 @@ play_track(current_track, current_playlist)
 
 audio, sample_rate = soundfile.read(fixedplaylist[0], dtype="float32")
 audio = audio.T
-print("Sample rate:", sample_rate)
-print("Audio shape:", audio.shape)
-print("Duration:", audio.shape[1] / sample_rate, "seconds")
-
-testaudio = audio[:, :sample_rate * 10]
-print("Test segment shape:", testaudio.shape)
 
 processed_audio = time_stretch(
-    testaudio,
+    audio,
     sample_rate,
     stretch_factor = 0.8,
     pitch_shift_in_semitones = -3,
     high_quality = True
     )
-
-reverb_effect = Pedalboard([
-    Reverb(
-        room_size=0.60,
-        wet_level=0.40
-    )
-]) #REVERB!!! HELL YEAH!! :DDDDDDDDDDD
-
-processed_audio = reverb_effect(processed_audio, sample_rate)
 
 soundfile.write(
     "T:/GitHub Repositories/AstroPlayer/Assets/Playlists/AudioProcessingTempFiles/TempSlowedAudio.wav",
@@ -148,7 +138,15 @@ soundfile.write(
     sample_rate
 )
 
+#def ApplyMusicEffects(source, mode):
+    
+    
+
 while running:
+    '''
+    AudioEffectsWarning_Nightcore = controlfontactual.render("Please Disable Nightcore Mode first...", True, (255, 0, 0))
+    AudioEffectsWarning_Slowed = controlfontactual.render("Please Disable Slowed+Reverb Mode first...", True, (255, 0, 0))
+    '''
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -238,7 +236,60 @@ while running:
                 
             elif (event.key == pygame.K_l):
                 loop_bool = not loop_bool
+                
+            elif (event.key == pygame.K_n and AudioEffectsIdentifier_Slowed_Bool == False): #'N' for Nightcore Toggle, Will not work with Slowed+Reverb Toggled Already
+                AudioEffectsIdentifier_Nightcore_Bool = not AudioEffectsIdentifier_Nightcore_Bool
+                print("Nightcore mode Engaged!")
+                
+                audio, sample_rate = soundfile.read(current_playlist[current_track], dtype="float32")
+                audio = audio.T
 
+                processed_audio = time_stretch(
+                    audio,
+                    sample_rate,
+                    stretch_factor = 1.2,
+                    pitch_shift_in_semitones = 3,
+                    high_quality = True
+                    )
+                
+                soundfile.write(
+                f"{audio_processing_root_complex}/{current_playlist[current_track]} - Nightcore.wav",
+                processed_audio.T,
+                sample_rate
+                )
+
+
+            elif (event.key == pygame.K_s and AudioEffectsIdentifier_Nightcore_Bool == False): #'S' for Slowed+Reverb Toggle, Will not work with Nightcore Toggled Already
+                AudioEffectsIdentifier_Slowed_Bool = not AudioEffectsIdentifier_Slowed_Bool
+                print("Slowed mode Engaged!")
+                
+                audio, sample_rate = soundfile.read(current_playlist[current_track], dtype="float32")
+                audio = audio.T
+
+                processed_audio = time_stretch(
+                    audio,
+                    sample_rate,
+                    stretch_factor = 0.8,
+                    pitch_shift_in_semitones = -3,
+                    high_quality = True
+                    )
+                
+                reverb_effect = Pedalboard([Reverb(room_size=0.60,wet_level=0.40)]) #REVERB!!! HELL YEAH!! :DDDDDDDDDDD
+                processed_audio = reverb_effect(processed_audio, sample_rate)
+                
+                soundfile.write(
+                f"{audio_processing_root_complex}/{current_playlist[current_track]} - Slowed+Reverb.wav",
+                processed_audio.T,
+                sample_rate
+                )
+                
+            '''    
+            elif (event.key == pygame.K_s and AudioEffectsIdentifier_Nightcore_Bool == True):
+                Slowed_Warning_Bool = not Slowed_Warning_Bool
+                #Warnings for if the User tries to act Funny
+            elif (event.key == pygame.K_n and AudioEffectsIdentifier_Slowed_Bool == True):
+                screen.blit(AudioEffectsWarning_Nightcore, (40, 340))
+            '''
             '''   
             elif (event.key == pygame.K_DOWN and playlist_view_bool == True):
                 playlist_scroll = playlist_scroll + 1
