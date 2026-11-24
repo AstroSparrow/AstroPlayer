@@ -31,6 +31,8 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 | , / . | Switch Playlists |
 | P | Toggle Playlist View |
 | L | Toggle Current Song Looping |
+| N | Toggle Nightcore Mode |
+| S | Toggle Slowed+Reverb Mode |
 | ↑ / ↓ | Scroll Playlist View |
 | Esc | Exit |
 
