@@ -1,6 +1,5 @@
 pygame
 Pillow
 keyboard
-numpy
 pedalboard
 soundfile

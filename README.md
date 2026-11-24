@@ -49,8 +49,9 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 
 ## Current Feature list to be Implemeneted into the Player
 1. [x] A Selectable Playlist View 
-2. [ ] A Nightcore/Slowed Mode that changes the Audio Playback and the Background Images
-3. [ ] A Disco Mode that makes the Background images react with the Music
+2. [x] A Looping Feature for the Current Playing Song 
+3. [ ] A Nightcore/Slowed Mode that changes the Audio Playback and the Background Images
+4. [ ] A Disco Mode that makes the Background images react with the Music
 
 
 ## License

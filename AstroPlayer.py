@@ -6,7 +6,6 @@ import keyboard
 import time
 import sys
 import soundfile
-import numpy
 from pedalboard import time_stretch, Pedalboard, Reverb
 
 #L = []
@@ -21,6 +20,7 @@ MessierNames = {'M1': 'Crab Nebula', 'M2': 'NGC 7089', 'M3': 'NGC 5272', 'M4': '
 BASE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, "frozen", False) else __file__))
 
 playlist_root_complex = os.path.join(BASE, "Assets", "Playlists")
+audio_processing_root_complex = os.path.join(BASE, "Assets", "Playlists", "AudioProcessingTempFiles")
 controlfont = os.path.join(BASE, "Assets", "Orbitron-Regular.ttf")
 controlimages = os.path.join(BASE, "Assets", "Images")
 controlicon = os.path.join(BASE, "Assets", "Voyager Icon.png")
@@ -33,6 +33,7 @@ for folder in os.listdir(playlist_root_complex):
     path = os.path.join(playlist_root_complex, folder)
     if (os.path.isdir(path)):
         playlistpaths.append(path)
+playlistpaths.remove("t:\\GitHub Repositories\\AstroPlayer\\Assets\\Playlists\\AudioProcessingTempFiles") #Removing the Processing Directory from the Playlists List, Else bad things would happen...
 
 controlicon = pygame.image.load(controlicon)
 pygame.display.set_icon(controlicon)
@@ -43,6 +44,7 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("AstroPlayer")
 
 def Loadplaylist(index):
+    global playlist
     playlist = []
     for file in os.listdir(playlistpaths[index]):
         path = os.path.join(playlistpaths[index], file)
@@ -52,11 +54,12 @@ def Loadplaylist(index):
     return PlaylistCheck(playlist)
 
 def PlaylistCheck(current_playlist):
-    newplaylist = []
+    global fixedplaylist
+    fixedplaylist = []
     for name in current_playlist:
         if (name[-3:].lower() == "mp3" or name[-3:].lower() == "wav" or name[-3:].lower() == "ogg"):
-            newplaylist.append(name)
-    return newplaylist
+            fixedplaylist.append(name)
+    return fixedplaylist
 
 while attempts < len(playlistpaths):
     current_playlist = Loadplaylist(currentplaylistindex)
@@ -112,6 +115,39 @@ overlay = pygame.Surface((800,600), pygame.SRCALPHA)
 overlay.fill((0,0,0,120))
 running = True
 play_track(current_track, current_playlist)
+
+audio, sample_rate = soundfile.read(fixedplaylist[0], dtype="float32")
+audio = audio.T
+print("Sample rate:", sample_rate)
+print("Audio shape:", audio.shape)
+print("Duration:", audio.shape[1] / sample_rate, "seconds")
+
+testaudio = audio[:, :sample_rate * 10]
+print("Test segment shape:", testaudio.shape)
+
+processed_audio = time_stretch(
+    testaudio,
+    sample_rate,
+    stretch_factor = 0.8,
+    pitch_shift_in_semitones = -3,
+    high_quality = True
+    )
+
+reverb_effect = Pedalboard([
+    Reverb(
+        room_size=0.60,
+        wet_level=0.40
+    )
+]) #REVERB!!! HELL YEAH!! :DDDDDDDDDDD
+
+processed_audio = reverb_effect(processed_audio, sample_rate)
+
+soundfile.write(
+    "T:/GitHub Repositories/AstroPlayer/Assets/Playlists/AudioProcessingTempFiles/TempSlowedAudio.wav",
+    processed_audio.T,
+    sample_rate
+)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
