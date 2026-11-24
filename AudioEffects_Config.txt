@@ -1,0 +1,5 @@
+Slowed = 0.8
+Slowed_Semitones = -3
+Nightcore = 1.2
+Nightcore_Semitones = 3
+ReverbValue = 0.4

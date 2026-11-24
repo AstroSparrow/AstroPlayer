@@ -17,3 +17,6 @@ dist/
 
 # Executables
 *.exe
+
+#AudioEffects Cache
+Assets/Playlists/AudioProcessingTempFiles/

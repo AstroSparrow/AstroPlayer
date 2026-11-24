@@ -20,6 +20,8 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 - Previous/Next track
 - Automatic playlist shuffling
 - A Playlist View with Selectable Songs (Click Song names to play)
+- Inbuilt Audio Processing for 2 Effects: Slowed + Reverb and Nightcore!
+- Adjustable Audio Effects Parameters
 
 
 ## Controls
@@ -32,7 +34,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 | P | Toggle Playlist View |
 | L | Toggle Current Song Looping |
 | N | Toggle Nightcore Mode |
-| S | Toggle Slowed+Reverb Mode |
+| S | Toggle Slowed + Reverb Mode |
 | ↑ / ↓ | Scroll Playlist View |
 | Esc | Exit |
 
@@ -52,7 +54,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 ## Current Feature list to be Implemeneted into the Player
 1. [x] A Selectable Playlist View 
 2. [x] A Looping Feature for the Current Playing Song 
-3. [ ] A Nightcore/Slowed Mode that changes the Audio Playback and the Background Images
+3. [x] A Nightcore/Slowed Mode that changes the Audio Playback and the Background Images
 4. [ ] A Disco Mode that makes the Background images react with the Music
 
 
@@ -62,7 +64,12 @@ This project is licensed under the MIT License.
 (I originally also bundled some music as per my choices with AstroPlayer, but had to remove it (Cause Copyright laws, Ofcourse). It was really disappointing tbh)
 
 
-**Note:** AstroPlayer requires at least one supported audio file (`.mp3`, `.wav`, or `.ogg`) in one of the playlist folders to start playback.
+## Notes 
+- AstroPlayer requires at least one supported audio file (`.mp3`, `.wav`, or `.ogg`) in one of the playlist folders to start playback.
+
+- When toggling one of the Audio Effects (Nightcore/Slowed + Reverb), AstroPlayer might freeze for a few moments. This is expected behaviour as the Program is Processing the files in the Background. (This Freeze will only happen when you first Toggle the Effects for that Particular Audio File per Launch. The Subsequent times, AstroPlayer will use the Cached files)
+
+- If you want to Adjust the Parameters (Strength) of the Audio Effects, You can do so by editing the Numeric Values in the `AudioEffects_Config.txt` (Please do not change the Structure of the Config file while changing the Parameters as that could result in unforseen errors (That i was too tired to Iron out or write Edge cases for)).
 
 - You can Download the latest pre-built executable from the **Releases** page, or run the source code using Python.
 
