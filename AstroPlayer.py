@@ -121,26 +121,42 @@ overlay.fill((0,0,0,120))
 running = True
 play_track(current_track, current_playlist)
 
-audio, sample_rate = soundfile.read(fixedplaylist[0], dtype="float32")
-audio = audio.T
-
-processed_audio = time_stretch(
-    audio,
-    sample_rate,
-    stretch_factor = 0.8,
-    pitch_shift_in_semitones = -3,
-    high_quality = True
-    )
-
-soundfile.write(
-    "T:/GitHub Repositories/AstroPlayer/Assets/Playlists/AudioProcessingTempFiles/TempSlowedAudio.wav",
-    processed_audio.T,
-    sample_rate
-)
-
-#def ApplyMusicEffects(source, mode):
+def ApplyMusicEffects(source, mode):
+    audio, sample_rate = soundfile.read(source, dtype="float32")
+    audio = audio.T
     
-    
+    if (mode == "Nightcore"):
+        processed_audio = time_stretch(
+        audio,
+        sample_rate,
+        stretch_factor = 1.2,
+        pitch_shift_in_semitones = 3,
+        high_quality = False
+        )
+        
+        soundfile.write(
+        f"{audio_processing_root_complex}/{os.path.basename(current_playlist[current_track])} - Nightcore.wav",
+        processed_audio.T,
+        sample_rate
+        )
+        
+    elif (mode == "Slowed&Reverb"):
+        processed_audio = time_stretch(
+        audio,
+        sample_rate,
+        stretch_factor = 0.8,
+        pitch_shift_in_semitones = -3,
+        high_quality = False
+        )
+        
+        reverb_effect = Pedalboard([Reverb(room_size=0.60,wet_level=0.40)]) #REVERB!!! HELL YEAH!! :DDDDDDDDDDD
+        processed_audio = reverb_effect(processed_audio, sample_rate)
+        
+        soundfile.write(
+        f"{audio_processing_root_complex}/{os.path.basename(current_playlist[current_track])} - Slowed+Reverb.wav",
+        processed_audio.T,
+        sample_rate
+        )
 
 while running:
     '''
@@ -239,49 +255,13 @@ while running:
                 
             elif (event.key == pygame.K_n and AudioEffectsIdentifier_Slowed_Bool == False): #'N' for Nightcore Toggle, Will not work with Slowed+Reverb Toggled Already
                 AudioEffectsIdentifier_Nightcore_Bool = not AudioEffectsIdentifier_Nightcore_Bool
-                print("Nightcore mode Engaged!")
-                
-                audio, sample_rate = soundfile.read(current_playlist[current_track], dtype="float32")
-                audio = audio.T
-
-                processed_audio = time_stretch(
-                    audio,
-                    sample_rate,
-                    stretch_factor = 1.2,
-                    pitch_shift_in_semitones = 3,
-                    high_quality = True
-                    )
-                
-                soundfile.write(
-                f"{audio_processing_root_complex}/{current_playlist[current_track]} - Nightcore.wav",
-                processed_audio.T,
-                sample_rate
-                )
-
+                ApplyMusicEffects(current_playlist[current_track], "Nightcore")
+                print("Nightcore Testing...")
 
             elif (event.key == pygame.K_s and AudioEffectsIdentifier_Nightcore_Bool == False): #'S' for Slowed+Reverb Toggle, Will not work with Nightcore Toggled Already
                 AudioEffectsIdentifier_Slowed_Bool = not AudioEffectsIdentifier_Slowed_Bool
-                print("Slowed mode Engaged!")
-                
-                audio, sample_rate = soundfile.read(current_playlist[current_track], dtype="float32")
-                audio = audio.T
-
-                processed_audio = time_stretch(
-                    audio,
-                    sample_rate,
-                    stretch_factor = 0.8,
-                    pitch_shift_in_semitones = -3,
-                    high_quality = True
-                    )
-                
-                reverb_effect = Pedalboard([Reverb(room_size=0.60,wet_level=0.40)]) #REVERB!!! HELL YEAH!! :DDDDDDDDDDD
-                processed_audio = reverb_effect(processed_audio, sample_rate)
-                
-                soundfile.write(
-                f"{audio_processing_root_complex}/{current_playlist[current_track]} - Slowed+Reverb.wav",
-                processed_audio.T,
-                sample_rate
-                )
+                ApplyMusicEffects(current_playlist[current_track], "Slowed&Reveb")
+                print("Slowed Testing...")
                 
             '''    
             elif (event.key == pygame.K_s and AudioEffectsIdentifier_Nightcore_Bool == True):
