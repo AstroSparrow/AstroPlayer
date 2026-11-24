@@ -184,6 +184,8 @@ try:
 except:
     pass
 
+Slowed_Value, Slowed_Semitones, Nightcore_Value, Nightcore_Semitones, ReverbValue = float(Slowed_Value), float(Slowed_Semitones), float(Nightcore_Value), float(Nightcore_Semitones), float(ReverbValue)
+
 Background = LoadImage()
 overlay = pygame.Surface((800,600), pygame.SRCALPHA)
 overlay.fill((0,0,0,120))
@@ -222,7 +224,7 @@ def ApplyMusicEffects(source, mode):
         sample_rate,
         stretch_factor = Nightcore_Value,
         pitch_shift_in_semitones = Nightcore_Semitones,
-        high_quality = True
+        high_quality = False
         )
         
         soundfile.write(
@@ -237,7 +239,7 @@ def ApplyMusicEffects(source, mode):
         sample_rate,
         stretch_factor = Slowed_Value,
         pitch_shift_in_semitones = Slowed_Semitones,
-        high_quality = True
+        high_quality = False
         )
         
         reverb_effect = Pedalboard([Reverb(room_size = 0.60, wet_level = ReverbValue)]) #REVERB!!! HELL YEAH!! :DDDDDDDDDDD
