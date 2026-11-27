@@ -8,7 +8,7 @@ import sys
 import soundfile
 from pedalboard import time_stretch, Pedalboard, Reverb
 
-L = []
+L = [] #Finally reusing this old List which was commented out long ago! (Bro has been Resurected from the 'Comment Land' to Aid in Reading Config Files!)
 #L2 = []
 #L3 = []
 playlistpaths = []
@@ -151,11 +151,22 @@ def LoadImage():
     Background = pygame.image.fromstring(Data2, Size2, Mode2)
     return Background
 
-#Janky Config Reader... (I know it's bad :/)
+#Janky Config Reader... (I know it's bad :/) [Redundant now!]
 try:
     AudioEffectsConfig = open(f"{BASE}/AudioEffects_Config.txt")
-    Config = AudioEffectsConfig.readlines()
+    Config = AudioEffectsConfig.read()
+    Config_Actual = Config.split()
 
+    for i in Config_Actual:
+        try:
+            float(i)
+            L.append(float(i))
+        except:
+            pass
+except:
+    pass
+
+''' #The old Janky Config reader code
     for i in Config[0]:
         if i.isnumeric():
             L.append(i)
@@ -181,10 +192,9 @@ try:
                     L.append(i)
     ReverbValue = f"{L[0]}.{L[1]}"
     L = []
-except:
-    pass
+'''
 
-Slowed_Value, Slowed_Semitones, Nightcore_Value, Nightcore_Semitones, ReverbValue = float(Slowed_Value), float(Slowed_Semitones), float(Nightcore_Value), float(Nightcore_Semitones), float(ReverbValue)
+Slowed_Value, Slowed_Semitones, Nightcore_Value, Nightcore_Semitones, ReverbValue = L[0], L[1], L[2], L[3], L[4]
 
 Background = LoadImage()
 overlay = pygame.Surface((800,600), pygame.SRCALPHA)

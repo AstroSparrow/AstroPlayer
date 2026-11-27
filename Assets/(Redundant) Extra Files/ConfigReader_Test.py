@@ -2,11 +2,21 @@ import os
 import sys
 L = []
 BASE = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, "frozen", False) else __file__))
-AudioEffectsConfig = open(f"{BASE}/AudioEffects_Config.txt")
-Config = AudioEffectsConfig.readlines()
+AudioEffectsConfig = open("T:/GitHub Repositories/AstroPlayer/AudioEffects_Config.txt")
+Config = AudioEffectsConfig.read()
+Config_Actual = Config.split()
 
-print(Config[0])
+print(Config_Actual)
 
+for i in Config_Actual:
+    try:
+        float(i)
+        L.append(float(i))
+    except:
+        pass
+        
+print(L)
+'''
 for i in Config[1]:
     if i.isnumeric():
         L.append(i)
@@ -14,3 +24,4 @@ for i in Config[1]:
 print(L)
 SlowedValue = f"{L[0]}.{L[1]}"
 print(SlowedValue)
+'''
