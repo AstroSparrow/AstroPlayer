@@ -21,7 +21,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 - Automatic playlist shuffling
 - A Playlist View with Selectable Songs (Click Song names to play)
 - Inbuilt Audio Processing for 2 Effects: Slowed + Reverb and Nightcore!
-- Adjustable Audio Effects Parameters
+- Adjustable Audio Effects Parameters via the `AudioEffects_Config.txt`
 
 
 ## Controls
@@ -46,9 +46,8 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 
 
 ## Requirements
-- Windows
-- Python 3.12+ and the Program's Dependencies (to run the python source code)
-- Or download the pre-built executable from the Releases page.
+- Windows (You can Download the Windows Executable file from the 'Releases' page of the Repo!)
+- Python 3.12+ and the Program's Dependencies in `requirements.txt` (Only to run the Python source code)
 
 
 ## Current Feature list to be Implemeneted into the Player
@@ -56,6 +55,7 @@ _**Backstory:**_ I was originally trying to make a simple python script using py
 2. [x] A Looping Feature for the Current Playing Song 
 3. [x] A Nightcore/Slowed Mode that changes the Audio Playback
 4. [ ] A "Disco Mode" that makes the Background images react with the Music
+5. [ ] Think of more ideas to build into AstroPlayer
 
 
 ## License
